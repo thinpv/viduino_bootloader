@@ -45,7 +45,7 @@ CFLAGS		+=	-ffreestanding -std=gnu11 $(DEFINES)
 CPFLAGS		+=	-ffreestanding -std=gnu++11 $(DEFINES) -fno-rtti
 LDFLAGS		+=	-Wl,-gc-sections 
 
-LIBS 			:= 
+LIBS 			:= -lgcc -lm -lc -lnosys
 
 SRCDIRS		+= .
 

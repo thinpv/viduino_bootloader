@@ -51,7 +51,7 @@ int boot_main(int argc, char **argv)
 	outSize = ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE]) +
 						 ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE + 1]) << 8) +
 						 ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE + 2]) << 16));
-	// printf("outSize: %d\r\n", outSize);
+	printf("outSize: %d\r\n", outSize);
 
 	inSize -= (LZMA_PROPS_SIZE + 8);
 	inBuffer += (LZMA_PROPS_SIZE + 8);

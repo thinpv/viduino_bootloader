@@ -278,7 +278,7 @@ static INT8 *FormatItem(INT8 *f, INT a)
 }
 
 
-void printf(char * pcStr,...)
+void sysprintf(char * pcStr,...)
 {
 	char *argP;
 
