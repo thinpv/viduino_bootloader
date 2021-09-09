@@ -29,6 +29,7 @@
 // #include <xboot.h>
 #include <stdint.h>
 #include <types.h>
+#include <F1C100S.h>
 
 extern unsigned char __image_start[];
 extern unsigned char __image_end[];
@@ -39,6 +40,7 @@ extern void sys_spinor_read(int addr, void *buf, int count);
 
 void sys_copyself(void)
 {
+	uint8_t boot_to_app = 0;
 	void * mem = (void *)__image_start;
 	uint32_t size = __image_end - __image_start;
 	sys_mmu_init();
