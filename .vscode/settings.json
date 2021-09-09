@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+			"cstdio": "c",
+			"sys_interrupt.h": "c",
+			"reg_tcon.h": "c",
+			"types.h": "c",
+			"sys_types.h": "c",
+			"stddef.h": "c"
+		}
+}

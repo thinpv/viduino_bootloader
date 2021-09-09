@@ -1,0 +1,148 @@
+thinpv@thinpv-ThinkPad-T490s:~$ /home/thinpv/.arduino15/packages/Viduino/tools/python3/3.7.2-post1/python3 /home/thinpv/.arduino15/packages/Viduino/hardware/ARM926/0.0.4/tools/upload.py --trace --no-stub --port /dev/ttyUSB0 -b 230400 write_flash 0x200000 /tmp/arduino_build_482396/test_arduino.ino.bin
+esptool.py v3.0
+Serial port /dev/ttyUSB0
+Connecting...TRACE +0.000 command op=0x08 data len=36 wait_response=1 timeout=0.100 data=
+    0707122055555555 5555555555555555 | ... UUUUUUUUUUUU
+    5555555555555555 5555555555555555 | UUUUUUUUUUUUUUUU
+    55555555                          | UUUU
+TRACE +0.000 Write 46 bytes: 
+    c000082400000000 0007071220555555 | ...$........ UUU
+    5555555555555555 5555555555555555 | UUUUUUUUUUUUUUUU
+    5555555555555555 5555555555c0     | UUUUUUUUUUUUU.
+TRACE +0.101 Timed out waiting for packet header
+.TRACE +0.051 command op=0x08 data len=36 wait_response=1 timeout=0.100 data=
+    0707122055555555 5555555555555555 | ... UUUUUUUUUUUU
+    5555555555555555 5555555555555555 | UUUUUUUUUUUUUUUU
+    55555555                          | UUUU
+TRACE +0.000 Write 46 bytes: 
+    c000082400000000 0007071220555555 | ...$........ UUU
+    5555555555555555 5555555555555555 | UUUUUUUUUUUUUUUU
+    5555555555555555 5555555555c0     | UUUUUUUUUUUUU.
+TRACE +0.015 Read 1 bytes: c0
+TRACE +0.000 Read 111 bytes: 
+    0108040007122055 00000000c0c00108 | ...... U........
+    0400071220550000 0000c0c001080400 | .... U..........
+    0712205500000000 c0c0010804000712 | .. U............
+    205500000000c0c0 0108040007122055 |  U............ U
+    00000000c0c00108 0400071220550000 | ............ U..
+    0000c0c001080400 0712205500000000 | .......... U....
+    c0c0010804000712 205500000000c0   | ........ U.....
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+TRACE +0.000 Received full packet: 010804000712205500000000
+
+Detecting chip type...TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=00100040
+TRACE +0.000 Write 14 bytes: c0 00 0a 0400 00000000 00100040 c0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a0400831df00000000000c0
+TRACE +0.000 Received full packet: 01 0a 0400 831df000 00000000 v
+ ESP32
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=0ca0f53f
+TRACE +0.000 Write 14 bytes: c0 00 0a 0400 00000000 0ca0f53f c0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000080000000000000c0
+TRACE +0.000 Received full packet: 01 0a 0400 00800000 00000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=0ca0f53f
+TRACE +0.000 Write 14 bytes: c0 00 0a 0400 00000000 0ca0f53f c0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000080000000000000c0
+TRACE +0.000 Received full packet: 01 0a 0400 00800000 00000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=14a0f53f
+TRACE +0.000 Write 14 bytes: c0 00 0a 0400 00000000 14a0f53f c0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000000000000000000c0
+TRACE +0.000 Received full packet: 01 0a 0400 00000000 00000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=7c60f63f
+TRACE +0.000 Write 14 bytes: c0 00 0a 0400 00000000 7c60f63f c0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000020041600000000c0
+TRACE +0.000 Received full packet: 010a0400 00200416 00000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=0ca0f53f
+TRACE +0.000 Write 14 bytes: c0000a0400000000000ca0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000080000000000000c0
+TRACE +0.000 Received full packet: 010a04000080000000000000 v
+Chip is ESP32-D0WDQ6 (revision 1)
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=0ca0f53f
+TRACE +0.000 Write 14 bytes: c0000a0400000000000ca0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000080000000000000c0
+TRACE +0.000 Received full packet: 010a04000080000000000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=0ca0f53f
+TRACE +0.000 Write 14 bytes: c0000a0400000000000ca0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000080000000000000c0
+TRACE +0.000 Received full packet: 010a04000080000000000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=10a0f53f
+TRACE +0.000 Write 14 bytes: c0000a04000000000010a0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04003900000000000000c0
+TRACE +0.000 Received full packet: 010a0400 39000000 00000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=18a0f53f
+TRACE +0.000 Write 14 bytes: c0000a04000000000018a0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04000400000000000000c0
+TRACE +0.000 Received full packet: 010a0400 04000000 00000000 v
+Features: WiFi, BT, Dual Core, Coding Scheme None
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=1400f43f
+TRACE +0.000 Write 14 bytes: c0000a0400000000001400f43fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a04006201000000000000c0
+TRACE +0.000 Received full packet: 010a0400 62010000 00000000 v
+Crystal is 40MHz
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=08a0f53f
+TRACE +0.000 Write 14 bytes: c0000a04000000000008a0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a0400ae30eb0000000000c0
+TRACE +0.000 Received full packet: 010a0400 ae30eb00 00000000 v
+TRACE +0.000 command op=0x0a data len=4 wait_response=1 timeout=3.000 data=04a0f53f
+TRACE +0.000 Write 14 bytes: c0000a04000000000004a0f53fc0 v
+TRACE +0.003 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010a0400589349a400000000c0
+TRACE +0.000 Received full packet: 010a0400 589349a4 00000000 v
+MAC: 30:ae:a4:49:93:58
+Changing baud rate to 230400
+TRACE +0.000 command op=0x0f data len=8 wait_response=1 timeout=3.000 data=0084030000000000
+TRACE +0.000 Write 18 bytes: 
+    c0000f0800000000 0000840300000000 | ................
+    00c0                              | ..
+TRACE +0.004 Read 1 bytes: c0
+TRACE +0.000 Read 14 bytes: 010f0400589349a400000000c060
+TRACE +0.000 Received full packet: 01 0f 0400 589349a4 00000000
+Changed.
+Enabling default SPI flash mode...
+TRACE +0.051 command op=0x0d data len=8 wait_response=1 timeout=3.000 data=0000000000000000
+TRACE +0.000 Write 18 bytes: 
+    c0000d0800000000 0000000000000000 | ................
+    00c0                              | ..
+TRACE +0.002 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 010d0400589349a400000000c0
+TRACE +0.000 Received full packet: 010d0400589349a400000000
+Configuring flash size...
+Erasing flash...
+TRACE +0.001 command op=0x02 data len=16 wait_response=1 timeout=3.000 data=a0af00002c0000000004000000002000
+TRACE +0.000 Write 26 bytes: 
+    c000021000000000 00a0af00002c0000 | .............,..
+    0000040000000020 00c0             | ....... ..
+TRACE +0.002 Read 1 bytes: c0
+TRACE +0.000 Read 13 bytes: 01020400589349a401060000c0
+TRACE +0.000 Received full packet: 01020400589349a401060000
+Traceback (most recent call last):
+  File "/home/thinpv/.arduino15/packages/Viduino/hardware/ARM926/0.0.4/tools/upload.py", line 65, in <module>
+    esptool.main(cmdline)
+  File "/home/thinpv/.arduino15/packages/Viduino/hardware/ARM926/0.0.4/tools/esptool/esptool.py", line 3604, in main
+    operation_func(esp, args)
+  File "/home/thinpv/.arduino15/packages/Viduino/hardware/ARM926/0.0.4/tools/esptool/esptool.py", line 2977, in write_flash
+    blocks = esp.flash_begin(uncsize, address, begin_rom_encrypted=args.encrypt)
+  File "/home/thinpv/.arduino15/packages/Viduino/hardware/ARM926/0.0.4/tools/esptool/esptool.py", line 646, in flash_begin
+    self.check_command("enter Flash download mode", self.ESP_FLASH_BEGIN,
+  File "/home/thinpv/.arduino15/packages/Viduino/hardware/ARM926/0.0.4/tools/esptool/esptool.py", line 423, in check_command
+    raise FatalError.WithResult('Failed to %s' % op_description, status_bytes)
+esptool.FatalError: Failed to enter Flash download mode (result was 01060000)
+thinpv@thinpv-ThinkPad-T490s:~$ 
+
