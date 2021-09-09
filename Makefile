@@ -25,9 +25,9 @@ AR	          = $(CROSS_COMPILE)ar rcs
 LD	          = $(CROSS_COMPILE)ld
 OBJCOPY	      = $(CROSS_COMPILE)objcopy
 OBJDUMP       = $(CROSS_COMPILE)objdump
-SIZE 		  = $(CROSS_COMPILE)size
+SIZE					= $(CROSS_COMPILE)size
 
-MACHINE			= boot
+BOOT				= boot
 DRIVER			= driver
 LIB					= lib
 
@@ -48,17 +48,19 @@ LIBS 			:=
 
 SRCDIRS		+= .
 
-INCDIRS		+= $(MACHINE)/include $(MACHINE)/include/f1c100s
-SRCDIRS		+= $(MACHINE)
+INCDIRS		+= $(BOOT)/include $(BOOT)/include/f1c100s
+SRCDIRS		+= $(BOOT)
 
 INCDIRS		+= $(LIB) $(LIB)/include
-SRCDIRS		+= $(LIB)
+SRCDIRS		+= $(LIB) 
+# $(LIB)/libc/string
+# $(LIB)/libutils/isoc/arch/arm
 
-INCDIRS		+= $(DRIVER)/include
-SRCDIRS		+= $(DRIVER)
+# INCDIRS		+= $(DRIVER)/include
+# SRCDIRS		+= $(DRIVER)
 
 INCDIRS		+= arm32/include
-# SRCDIRS		+= bootloader
+SRCDIRS		+=
 
 # INCDIRS		+= bootloader/include
 # SRCDIRS		+= bootloader

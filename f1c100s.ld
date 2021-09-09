@@ -25,6 +25,7 @@ SECTIONS
 		build/boot/start.o (.text*)
 		build/lib/memcpy.o (.text*)
 		build/lib/memset.o (.text*)
+		build/lib/strlen.o (.text*)
 		build/boot/sys-uart.o (.text*)
 		build/boot/sys-clock.o (.text*)
 		build/boot/sys-dram.o (.text*)

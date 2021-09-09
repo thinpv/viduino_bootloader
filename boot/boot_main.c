@@ -83,9 +83,9 @@ void __assert_func(const char *file, int line, const char *func, const char *exp
 }
 #endif
 
-int printf(const char *format, ...)
-{
-}
+// int printf(const char *format, ...)
+// {
+// }
 
 void interrupt_handle_exception(void *regs)
 {
