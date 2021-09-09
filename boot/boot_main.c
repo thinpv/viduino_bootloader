@@ -8,54 +8,69 @@
 
 // #include "slip.h"
 
+#include "Precomp.h"
+#include "Alloc.h"
+#include "LzmaDec.h"
+
+// #include <_acAlloc.h>
+// #include <_aclv_demo_music.h>
+
+#define SIZE_4K 0x1000
+#define SIZE_64K 0x10000
+
+#define FLASH_APP_LEN_START_ADDRESS (0x00200000 - SIZE_4K)
+#define FLASH_APP_START_ADDRESS 0x00200000
+
+extern void sys_spinor_init(void);
+extern void sys_spinor_exit(void);
+extern void sys_spinor_read(int addr, void *buf, int count);
+
+extern unsigned char __out_start[];
+extern unsigned char __in_start[];
+extern void jump_to_app(uint32_t entry);
+
 int boot_main(int argc, char **argv)
 {
-	sys_uart_putc('m');
-	sys_uart_putc('a');
-	sys_uart_putc('i');
-	sys_uart_putc('n');
-	sys_uart_putc('\r');
-	sys_uart_putc('\n');
 	printf("boot_main:\r\n");
-	// sys_init();
-	// unsigned int CPU_Frequency_hz=408*1000000;//HZ
 
-	// sys_dram_init(32*FIC);
-	// sys_clock_init(CPU_Frequency_hz);
-	// sys_spi_flash_init();
-	// Sys_Uart_Init(UART0,CPU_Frequency_hz,115200,0);
-	// Sys_SET_UART_DBG(UART0);
+	do_init_mem_pool();
 
-	// sysprintf("\r\n\r\n\r\n");
-	// sysprintf("F1C%d00S BOOT START...\r\n",FIC);
-	// sysprintf("XiaoTaoQiKJ [2020-07-25]...\r\n");
-	// sysprintf("QQ:718595426\r\n\r\n");
-	// sysprintf("CPU Frequency:%d Hz\r\n",CPU_Frequency_hz);
-	// sysprintf("DRAM Size: %d MB\r\n",32*FIC);
+	char *inBuffer = __in_start;
+	uint32_t inSize;
+	char *outBuffer = __out_start; //malloc(outSize);
+	size_t outSize;
+	ELzmaStatus status;
+	char *p;
 
-	// sys_print_init();
-	// sys_print_c('A');
-	// sys_print_c('\r');
-	// sys_print_c('\n');
-	// sys_print_s("sys_copyself\r\n");
-	// printf("Boot to Bootloader\r\n");
-	// sys_copyself();
+	printf("copy data from spi\r\n");
+	sys_spinor_init();
+	sys_spinor_read(FLASH_APP_LEN_START_ADDRESS, (uint8_t *)&inSize, 4);
+	sys_spinor_read(FLASH_APP_START_ADDRESS, inBuffer, inSize);
+	sys_spinor_exit();
 
-	// /* Do initial mem pool */
-	// do_init_mem_pool();
-	// do_init_dma_pool();
+	outSize = ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE]) +
+						 ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE + 1]) << 8) +
+						 ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE + 2]) << 16));
+	// printf("outSize: %d\r\n", outSize);
 
-	// // sys_print_init();
-	// irq_init();
-	// timer0_set();
+	inSize -= (LZMA_PROPS_SIZE + 8);
+	inBuffer += (LZMA_PROPS_SIZE + 8);
 
-	// sys_spi_flash_init();
-	// printf("Boot to Bootloader\r\n");
-	// printf("Old app data len: %ld\r\n", sys_spi_flash_read_data_size());
-	// slip_start();
-	// sys_spi_flash_exit();
-	printf("Flash finish\r\n");
-	// sys_print_exit();
+	printf("start decode\r\n");
+	/* Decompress stage2 into memory */
+	SRes res = LzmaDecode(outBuffer,
+												&outSize,
+												inBuffer,
+												&inSize,
+												inBuffer - (LZMA_PROPS_SIZE + 8),
+												LZMA_PROPS_SIZE,
+												LZMA_FINISH_END,
+												&status,
+												(ISzAlloc *)&g_Alloc);
+
+	printf("res: %d\r\n", res);
+
+	jump_to_app(outBuffer);
 
 	while (1)
 		;

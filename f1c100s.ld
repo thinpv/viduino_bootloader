@@ -10,28 +10,41 @@ STACK_SRV_SIZE = 0x40000;
 
 MEMORY
 {
-	ram  : org = 0x80000000, len = 8M
-	dma  : org = 0x80800000, len = 8M
-	heap : org = 0x81000000, len = 16M
+	out		: org = 0x80000000, len = 16M
+	in		: org = 0x81000000, len = 8M
+	app		: org = 0x81800000, len = 2M
+	heap	: org = 0x81A00000, len = 6M
 }
 
 SECTIONS
 {
+	.out ALIGN(8) (NOLOAD) :
+	{
+		PROVIDE(__out_start = ORIGIN(out));
+		PROVIDE(__out_end = ORIGIN(out) + LENGTH(out));
+	} > out
+
+	.in ALIGN(8) (NOLOAD) :
+	{
+		PROVIDE(__in_start = ORIGIN(in));
+		PROVIDE(__in_end = ORIGIN(in) + LENGTH(in));
+	} > in
+
 	.text :
 	{
 		PROVIDE(__image_start = .);
 		PROVIDE(__text_start = .);
 		PROVIDE(__spl_start = .);
 		build/boot/start.o (.text*)
-		build/lib/memcpy.o (.text*)
-		build/lib/memset.o (.text*)
-		build/lib/strlen.o (.text*)
 		build/boot/sys-uart.o (.text*)
 		build/boot/sys-clock.o (.text*)
 		build/boot/sys-dram.o (.text*)
 		build/boot/sys-mmu.o (.text*)
 		build/boot/sys-spinor.o (.text*)
 		build/boot/sys-copyself.o (.text*)
+		build/lib/memcpy.o (.text*)
+		build/lib/memset.o (.text*)
+		build/lib/strlen.o (.text*)
 		PROVIDE(__spl_end = .);
 		*(.text*)
 		*(.init.text)
@@ -39,22 +52,45 @@ SECTIONS
 		*(.glue*)
 		*(.note.gnu.build-id)
 		PROVIDE(__text_end = .);
-	} > ram
+	} > app
 	PROVIDE(__spl_size = __spl_end - __spl_start);
+	
+	.preinit_array     :
+	{
+		PROVIDE_HIDDEN (__preinit_array_start = .);
+		KEEP (*(.preinit_array*))
+		PROVIDE_HIDDEN (__preinit_array_end = .);
+	} > app
+
+	.init_array :
+	{
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT(.init_array.*)))
+		KEEP (*(.init_array*))
+		PROVIDE_HIDDEN (__init_array_end = .);
+	} > app
+
+	.fini_array :
+	{
+		PROVIDE_HIDDEN (__fini_array_start = .);
+		KEEP (*(SORT(.fini_array.*)))
+		KEEP (*(.fini_array*))
+		PROVIDE_HIDDEN (__fini_array_end = .);
+	} > app
 
 	.ARM.exidx ALIGN(8) :
 	{
 		PROVIDE (__exidx_start = .);
 		*(.ARM.exidx*)
 		PROVIDE (__exidx_end = .);
-	} > ram
+	} > app
 
 	.ARM.extab ALIGN(8) :
 	{
 		PROVIDE (__extab_start = .);
 		*(.ARM.extab*)
 		PROVIDE (__extab_end = .);
-	} > ram
+	} > app
 
 	.initcall ALIGN(8) :
 	{
@@ -70,7 +106,7 @@ SECTIONS
 		KEEP(*(.initcall_8.text))
 		KEEP(*(.initcall_9.text))
 		PROVIDE(__initcall_end = .);
-	} > ram
+	} > app
 
 	.exitcall ALIGN(8) :
 	{
@@ -86,28 +122,28 @@ SECTIONS
 		KEEP(*(.exitcall_1.text))
 		KEEP(*(.exitcall_0.text))
 		PROVIDE(__exitcall_end = .);
-	} > ram
+	} > app
 
 	.ksymtab ALIGN(16) :
 	{
 		PROVIDE(__ksymtab_start = .);
 		KEEP(*(.ksymtab.text))
 		PROVIDE(__ksymtab_end = .);
-	} > ram
+	} > app
 
 	.romdisk ALIGN(8) :
 	{
 		PROVIDE(__romdisk_start = .);
 		KEEP(*(.romdisk))
 		PROVIDE(__romdisk_end = .);
-	} > ram
+	} > app
 
 	.rodata ALIGN(8) :
 	{
 		PROVIDE(__rodata_start = .);
 		*(SORT_BY_ALIGNMENT(SORT_BY_NAME(.rodata*)))
 		PROVIDE(__rodata_end = .);
-	} > ram
+	} > app
 
 	.data ALIGN(8) :
 	{
@@ -116,7 +152,7 @@ SECTIONS
 		. = ALIGN(8);
   		PROVIDE(__data_end = .);
 		PROVIDE(__image_end = .);
-	} > ram
+	} > app
 
 	.bss ALIGN(8) (NOLOAD) :
 	{
@@ -126,7 +162,7 @@ SECTIONS
 		*(COMMON)
 		. = ALIGN(8);
 		PROVIDE(__bss_end = .);
-	} > ram
+	} > app
 
 	.stack ALIGN(8) (NOLOAD) :
 	{
@@ -152,13 +188,7 @@ SECTIONS
 		PROVIDE(__stack_srv_end = .);
 		. = ALIGN(8);
 		PROVIDE(__stack_end = .);
-	} > ram
-
-	.dma ALIGN(8) (NOLOAD) :
-	{
-		PROVIDE(__dma_start = ORIGIN(dma));
-		PROVIDE(__dma_end = ORIGIN(dma) + LENGTH(dma));
-	} > dma
+	} > app
 
 	.heap ALIGN(8) (NOLOAD) :
 	{

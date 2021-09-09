@@ -77,92 +77,48 @@ static int get_boot_device(void)
 
 void sys_copyself(void)
 {
-	printf("\r\n\r\n\r\n\r\n");
-	printf("sys_copyself\r\n");
+	// printf("\r\n\r\n\r\n\r\n");
+	// printf("sys_copyself\r\n");
 	struct zdesc_t *z;
 	uint32_t csize, dsize;
 	void *mem, *tmp;
 	uint32_t size;
-	int d = get_boot_device();
+	sys_uart_putc('S');
+	sys_uart_putc('P');
+	sys_uart_putc('I');
+	sys_uart_putc('\r');
+	sys_uart_putc('\n');
+	z = (struct zdesc_t *)__heap_start;
+	mem = (void *)__image_start;
+	tmp = (void *)z + sizeof(struct zdesc_t);
+	size = __image_end - __image_start;
+	// sys_mmu_init();
+	// sys_init();
+	// printf("aaaaaaaaaaaa\r\n");
 
-	if (d == BOOT_DEVICE_FEL)
-	{
-		sys_uart_putc('B');
-		sys_uart_putc('o');
-		sys_uart_putc('o');
-		sys_uart_putc('t');
-		sys_uart_putc(' ');
-		sys_uart_putc('t');
-		sys_uart_putc('o');
-		sys_uart_putc(' ');
-		sys_uart_putc('F');
-		sys_uart_putc('E');
-		sys_uart_putc('L');
-		sys_uart_putc(' ');
-		sys_uart_putc('m');
-		sys_uart_putc('o');
-		sys_uart_putc('d');
-		sys_uart_putc('e');
-		sys_uart_putc('\r');
-		sys_uart_putc('\n');
-		return_to_fel();
-	}
-	else if (d == BOOT_DEVICE_SPI)
-	{
-		sys_uart_putc('B');
-		sys_uart_putc('o');
-		sys_uart_putc('o');
-		sys_uart_putc('t');
-		sys_uart_putc(' ');
-		sys_uart_putc('t');
-		sys_uart_putc('o');
-		sys_uart_putc(' ');
-		sys_uart_putc('S');
-		sys_uart_putc('P');
-		sys_uart_putc('I');
-		sys_uart_putc(' ');
-		sys_uart_putc('m');
-		sys_uart_putc('o');
-		sys_uart_putc('d');
-		sys_uart_putc('e');
-		sys_uart_putc('\r');
-		sys_uart_putc('\n');
-		z = (struct zdesc_t *)__heap_start;
-		mem = (void *)__image_start;
-		tmp = (void *)z + sizeof(struct zdesc_t);
-		size = __image_end - __image_start;
-		sys_mmu_init();
-
-		// sys_spinor_init();
-		// sys_spinor_read(24576, z, sizeof(struct zdesc_t));
-		// sys_spinor_exit();
-		// if((z->magic[0] == 'Z') && (z->magic[1] == 'B') && ((z->magic[2] == 'I') || (z->magic[2] == 0)) && ((z->magic[3] == 'E') || (z->magic[3] == 0)))
-		// {
-		// 	sys_crypt((char *)z->key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
-		// 	{
-		// 		csize = (z->csize[0] << 24) | (z->csize[1] << 16) | (z->csize[2] << 8) | (z->csize[3] << 0);
-		// 		dsize = (z->dsize[0] << 24) | (z->dsize[1] << 16) | (z->dsize[2] << 8) | (z->dsize[3] << 0);
-		// 		sys_spinor_init();
-		// 		sys_spinor_read(24576 + sizeof(struct zdesc_t), tmp, csize);
-		// 		sys_spinor_exit();
-		// 		{
-		// 			if(z->magic[3] == 'E')
-		// 				sys_crypt((char *)z->key, tmp, csize);
-		// 			sys_decompress(tmp, csize, mem, dsize);
-		// 		}
-		// 	}
-		// }
-		// else
-		// {
-		// sys_spinor_init();
-		// sys_spinor_read(0, mem, size);
-		// sys_spinor_exit();
-		// }
-	}
-	else if (d == BOOT_DEVICE_MMC)
-	{
-		mem = (void *)__image_start;
-		size = (__image_end - __image_start + 512) >> 9;
-		sys_mmu_init();
-	}
+	// sys_spinor_init();
+	// sys_spinor_read(24576, z, sizeof(struct zdesc_t));
+	// sys_spinor_exit();
+	// if((z->magic[0] == 'Z') && (z->magic[1] == 'B') && ((z->magic[2] == 'I') || (z->magic[2] == 0)) && ((z->magic[3] == 'E') || (z->magic[3] == 0)))
+	// {
+	// 	sys_crypt((char *)z->key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
+	// 	{
+	// 		csize = (z->csize[0] << 24) | (z->csize[1] << 16) | (z->csize[2] << 8) | (z->csize[3] << 0);
+	// 		dsize = (z->dsize[0] << 24) | (z->dsize[1] << 16) | (z->dsize[2] << 8) | (z->dsize[3] << 0);
+	// 		sys_spinor_init();
+	// 		sys_spinor_read(24576 + sizeof(struct zdesc_t), tmp, csize);
+	// 		sys_spinor_exit();
+	// 		{
+	// 			if(z->magic[3] == 'E')
+	// 				sys_crypt((char *)z->key, tmp, csize);
+	// 			sys_decompress(tmp, csize, mem, dsize);
+	// 		}
+	// 	}
+	// }
+	// else
+	// {
+	sys_spinor_init();
+	sys_spinor_read(0, mem, size);
+	sys_spinor_exit();
+	// }
 }

@@ -5,6 +5,9 @@
 			"reg_tcon.h": "c",
 			"types.h": "c",
 			"sys_types.h": "c",
-			"stddef.h": "c"
+			"stddef.h": "c",
+			"io.h": "c",
+			"lzmadec.h": "c",
+			"7ztypes.h": "c"
 		}
 }

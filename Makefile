@@ -30,6 +30,7 @@ SIZE					= $(CROSS_COMPILE)size
 BOOT				= boot
 DRIVER			= driver
 LIB					= lib
+LZMA				= lzma
 
 DEFINES		+= -D__ARM32_ARCH__=5 -D__ARM926EJS__ -D__ARM32__ -Wno-unused-function -D_7ZIP_ST
 
@@ -55,6 +56,9 @@ INCDIRS		+= $(LIB) $(LIB)/include
 SRCDIRS		+= $(LIB) 
 # $(LIB)/libc/string
 # $(LIB)/libutils/isoc/arch/arm
+
+INCDIRS		+= $(LZMA) $(LZMA)/file
+SRCDIRS		+= $(LZMA) 
 
 # INCDIRS		+= $(DRIVER)/include
 # SRCDIRS		+= $(DRIVER)

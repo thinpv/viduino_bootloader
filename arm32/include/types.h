@@ -24,9 +24,9 @@ extern "C"
 	typedef signed long long intmax_t;
 	typedef unsigned long long uintmax_t;
 
-	//typedef signed long	long		ptrdiff_t;
-	//typedef signed long	long		intptr_t;
-	//typedef unsigned long long		uintptr_t;
+	typedef signed long	long		ptrdiff_t;
+	typedef signed long	long		intptr_t;
+	typedef unsigned long long		uintptr_t;
 
 	typedef signed long off_t;
 	typedef signed long long loff_t;

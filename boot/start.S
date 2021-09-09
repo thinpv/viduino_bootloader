@@ -174,7 +174,7 @@ reset:
 	bl sys_uart_init
 
 	/* Boot speed up, leave slower sram */
-	adr r0, _start
+	/* adr r0, _start
 	ldr r1, =_start
 	cmp r0, r1
 	beq _speedup
@@ -189,7 +189,7 @@ reset:
 	add r0, r0, r1
 	mov pc, r0
 _speedup:
-	nop
+	nop */
 
 	/* Copyself to link address */
 	adr r0, _start
@@ -242,6 +242,11 @@ _main:
 	bl boot_main
 	b _main
 
+	.global jump_to_app
+jump_to_app:
+  mov     lr, r0
+	bx      lr
+
 	.global return_to_fel
 return_to_fel:
 	mov r0, #0x4
@@ -277,31 +282,19 @@ return_to_fel:
  */
 	.align 5
 undefined_instruction:
-	sub lr, lr, #4
-	save_regs
-	bl arm32_do_undefined_instruction
-	restore_regs
+	b .
 
 	.align 5
 software_interrupt:
-	sub lr, lr, #4
-	save_regs
-	bl arm32_do_software_interrupt
-	restore_regs
+	b .
 
 	.align 5
 prefetch_abort:
-	sub lr, lr, #4
-	save_regs
-	bl arm32_do_prefetch_abort
-	restore_regs
+	b .
 
 	.align 5
 data_abort:
-	sub lr, lr, #8
-	save_regs
-	bl arm32_do_data_abort
-	restore_regs
+	b .
 
 	.align 5
 not_used:
