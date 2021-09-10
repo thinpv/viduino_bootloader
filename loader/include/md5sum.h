@@ -13,23 +13,23 @@ typedef unsigned char uchar;
 
 typedef struct Table
 {
-	uint	sin;	/* integer part of 4294967296 times abs(sin(i)) */
-	byte	x;	/* index into data block */
-	byte	rot;	/* amount to rotate left by */
-}Table;
+	uint sin; /* integer part of 4294967296 times abs(sin(i)) */
+	byte x;		/* index into data block */
+	byte rot; /* amount to rotate left by */
+} Table;
 
 typedef struct MD5state
 {
 	uint len;
 	uint state[4];
 	uint done;
-}MD5state;
+} MD5state;
 
 /*
  *  I require len to be a multiple of 64 for all but
  *  the last call
  */
-MD5state* md5(byte *p, uint len, byte *digest, MD5state *s);
+MD5state *md5(byte *p, uint len, byte *digest, MD5state *s);
 
 /*
  *	encodes input (uint) into output (byte). Assumes len is

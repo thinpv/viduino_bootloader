@@ -31,11 +31,14 @@
 #include <io.h>
 #include <stddef.h>
 
+// #define LOG_ENABLE
+
 #define vaArg(list, type) ((type *)(list += sizeof(type)))[-1]
 #define vaStart(list, param) list = (INT8 *)((INT)&param + sizeof(param))
 
 void sys_uart_init(void)
 {
+#ifdef LOG_ENABLE
 	virtual_addr_t addr;
 	u32_t val;
 
@@ -80,17 +83,21 @@ void sys_uart_init(void)
 	val &= ~0x1f;
 	val |= (0x3 << 0) | (0 << 2) | (0x0 << 3);
 	write32(addr + 0x0c, val);
+#endif
 }
 
 void sys_uart_putc(char c)
 {
+#ifdef LOG_ENABLE
 	virtual_addr_t addr = 0x01c25000;
 
 	while ((read32(addr + 0x7c) & (0x1 << 1)) == 0)
 		;
 	write32(addr + 0x00, c);
+#endif
 }
 
+#ifdef LOG_ENABLE
 VOID sysPutString(INT8 *string)
 {
 	while (*string != '\0')
@@ -286,3 +293,4 @@ void sysprintf(char *pcStr, ...)
 			sys_uart_putc(*pcStr++);
 	}
 }
+#endif
