@@ -31,7 +31,7 @@ BOOT				= boot
 DRIVER			= driver
 LIB					= lib
 LZMA				= lzma
-LOADER			= bootloader
+LOADER			= loader
 
 DEFINES		+= -D__ARM32_ARCH__=5 -D__ARM926EJS__ -D__ARM32__ -Wno-unused-function -D_7ZIP_ST
 
@@ -54,21 +54,16 @@ INCDIRS		+= $(BOOT)/include $(BOOT)/include/f1c100s
 SRCDIRS		+= $(BOOT)
 
 INCDIRS		+= $(LIB) $(LIB)/include
-SRCDIRS		+= $(LIB) 
-# $(LIB)/libc/string
-# $(LIB)/libutils/isoc/arch/arm
-
-INCDIRS		+= $(LZMA) $(LZMA)/file
-SRCDIRS		+= $(LZMA) 
+SRCDIRS		+= $(LIB)
 
 INCDIRS		+= $(DRIVER)/include
 SRCDIRS		+= $(DRIVER)
 
-INCDIRS		+= arm32/include
-SRCDIRS		+=
-
 INCDIRS		+= $(LOADER)/include
 SRCDIRS		+= $(LOADER)
+
+INCDIRS		+= $(LZMA)
+SRCDIRS		+= $(LZMA) 
 
 SFILES	:=	$(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.S))
 CFILES	:=	$(foreach dir, $(SRCDIRS), $(wildcard $(dir)/*.c))

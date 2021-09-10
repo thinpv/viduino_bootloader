@@ -125,7 +125,7 @@ _fiq:
  */
 reset:
 	/* Save boot params to 0x00000040 */
-	ldr r0, =0x00000040
+	/* ldr r0, =0x00000040
 	str sp, [r0, #0]
 	str lr, [r0, #4]
 	mrs lr, cpsr
@@ -133,17 +133,17 @@ reset:
 	mrc p15, 0, lr, c1, c0, 0
 	str lr, [r0, #12]
 	mrc p15, 0, lr, c1, c0, 0
-	str lr, [r0, #16]
+	str lr, [r0, #16] */
 
 	/* Check boot type just for fel */
-	mov r0, #0x0
+	/* mov r0, #0x0
 	ldr r1, [r0, #8]
 	ldr r2, =0x4c45462e
 	cmp r1, r2
 	bne 1f
 	ldr r1, =0x1
 	str r1, [r0, #0x58]
-1:	nop
+1:	nop */
 
 	/* Enter svc mode and mask interrupts */
 	mrs r0, cpsr

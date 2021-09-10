@@ -32,7 +32,7 @@
 #include <stddef.h>
 
 #define vaArg(list, type) ((type *)(list += sizeof(type)))[-1]
-#define vaStart(list, param) list = (INT8*)((INT)&param + sizeof(param))
+#define vaStart(list, param) list = (INT8 *)((INT)&param + sizeof(param))
 
 void sys_uart_init(void)
 {
@@ -86,44 +86,43 @@ void sys_uart_putc(char c)
 {
 	virtual_addr_t addr = 0x01c25000;
 
-	while((read32(addr + 0x7c) & (0x1 << 1)) == 0);
+	while ((read32(addr + 0x7c) & (0x1 << 1)) == 0)
+		;
 	write32(addr + 0x00, c);
 }
 
 VOID sysPutString(INT8 *string)
 {
-		while (*string != '\0')
-		{
-			sys_uart_putc(*string);
-			string++;
-		}
-
+	while (*string != '\0')
+	{
+		sys_uart_putc(*string);
+		string++;
+	}
 }
 
 static VOID sysPutRepChar(INT8 c, INT count)
 {
 	while (count--)
-	sys_uart_putc(c);
+		sys_uart_putc(c);
 }
-
 
 static VOID sysPutStringReverse(INT8 *s, INT index)
 {
 	while ((index--) > 0)
-	sys_uart_putc(s[index]);
+		sys_uart_putc(s[index]);
 }
 
 static VOID sysPutNumber(INT value, INT radix, INT width, INT8 fill)
 {
-	INT8    buffer[40];
-	INT     bi = 0;
-	UINT32  uvalue;
-	UINT16  digit;
-	UINT16  left = FALSE;
-	UINT16  negative = FALSE;
+	INT8 buffer[40];
+	INT bi = 0;
+	UINT32 uvalue;
+	UINT16 digit;
+	UINT16 left = FALSE;
+	UINT16 negative = FALSE;
 
 	if (fill == 0)
-	    	fill = ' ';
+		fill = ' ';
 
 	if (width < 0)
 	{
@@ -132,7 +131,7 @@ static VOID sysPutNumber(INT value, INT radix, INT width, INT8 fill)
 	}
 
 	if (width < 0 || width > 80)
-	    	width = 0;
+		width = 0;
 
 	if (radix < 0)
 	{
@@ -141,7 +140,7 @@ static VOID sysPutNumber(INT value, INT radix, INT width, INT8 fill)
 		{
 			negative = TRUE;
 			value = -value;
-	    	}
+		}
 	}
 
 	uvalue = value;
@@ -164,14 +163,12 @@ static VOID sysPutNumber(INT value, INT radix, INT width, INT8 fill)
 
 		if (uvalue != 0)
 		{
-			if ((radix == 10)
-			    && ((bi == 3) || (bi == 7) || (bi == 11) | (bi == 15)))
+			if ((radix == 10) && ((bi == 3) || (bi == 7) || (bi == 11) | (bi == 15)))
 			{
 				buffer[bi++] = ',';
 			}
 		}
-	}
-	while (uvalue != 0);
+	} while (uvalue != 0);
 
 	if (negative)
 	{
@@ -188,18 +185,17 @@ static VOID sysPutNumber(INT value, INT radix, INT width, INT8 fill)
 			sysPutRepChar(fill, width);
 		sysPutStringReverse(buffer, bi);
 		if (left)
-		    	sysPutRepChar(fill, width);
+			sysPutRepChar(fill, width);
 	}
 }
 
-
 static INT8 *FormatItem(INT8 *f, INT a)
 {
-	INT8   c;
-	INT    fieldwidth = 0;
-	INT    leftjust = FALSE;
-	INT    radix = 0;
-	INT8   fill = ' ';
+	INT8 c;
+	INT fieldwidth = 0;
+	INT leftjust = FALSE;
+	INT radix = 0;
+	INT8 fill = ' ';
 
 	if (*f == '0')
 		fill = '0';
@@ -213,81 +209,80 @@ static INT8 *FormatItem(INT8 *f, INT a)
 		else
 			switch (c)
 			{
-				case '\000':
-					return (--f);
-				case '%':
-				    	sys_uart_putc('%');
-				    	return (f);
-				case '-':
-				    	leftjust = TRUE;
-				    	break;
-				case 'c':
-				{
-				        if (leftjust)
-				        	sys_uart_putc(a & 0x7f);
+			case '\000':
+				return (--f);
+			case '%':
+				sys_uart_putc('%');
+				return (f);
+			case '-':
+				leftjust = TRUE;
+				break;
+			case 'c':
+			{
+				if (leftjust)
+					sys_uart_putc(a & 0x7f);
 
-				        if (fieldwidth > 0)
-				            	sysPutRepChar(fill, fieldwidth - 1);
+				if (fieldwidth > 0)
+					sysPutRepChar(fill, fieldwidth - 1);
 
-				        if (!leftjust)
-				            	sys_uart_putc(a & 0x7f);
-				        return (f);
-				}
-				case 's':
-				{
-				        if (leftjust)
-				        	sysPutString((PINT8)a);
+				if (!leftjust)
+					sys_uart_putc(a & 0x7f);
+				return (f);
+			}
+			case 's':
+			{
+				if (leftjust)
+					sysPutString((PINT8)a);
 
-				        if (fieldwidth > strlen((PINT8)a))
-				            	sysPutRepChar(fill, fieldwidth - strlen((PINT8)a));
+				if (fieldwidth > strlen((PINT8)a))
+					sysPutRepChar(fill, fieldwidth - strlen((PINT8)a));
 
-				        if (!leftjust)
-				           	sysPutString((PINT8)a);
-				        return (f);
-				}
-				case 'd':
-				case 'i':
-				   	 radix = -10;
+				if (!leftjust)
+					sysPutString((PINT8)a);
+				return (f);
+			}
+			case 'd':
+			case 'i':
+				radix = -10;
 				break;
-				case 'u':
-				    	radix = 10;
+			case 'u':
+				radix = 10;
 				break;
-				case 'x':
-				    	radix = 16;
+			case 'x':
+				radix = 16;
 				break;
-				case 'X':
-				    	radix = 16;
+			case 'X':
+				radix = 16;
 				break;
-				case 'o':
-				    	radix = 8;
+			case 'o':
+				radix = 8;
 				break;
-				default:
-				    	radix = 3;
-				break;      /* unknown switch! */
+			default:
+				radix = 3;
+				break; /* unknown switch! */
 			}
 		if (radix)
-		    break;
+			break;
 	}
 
 	if (leftjust)
-	    	fieldwidth = -fieldwidth;
+		fieldwidth = -fieldwidth;
 
 	sysPutNumber(a, radix, fieldwidth, fill);
 
 	return (f);
 }
 
-
-void sysprintf(char * pcStr,...)
+void sysprintf(char *pcStr, ...)
 {
 	char *argP;
 
-	vaStart(argP, pcStr);       /* point at the end of the format string */
+	vaStart(argP, pcStr); /* point at the end of the format string */
 	while (*pcStr)
-	{                       /* this works because args are all ints */
+	{ /* this works because args are all ints */
 		if (*pcStr == '%')
-					pcStr = FormatItem(pcStr + 1, vaArg(argP, INT));
+			pcStr = FormatItem(pcStr + 1, vaArg(argP, INT));
 		else
-					sys_uart_putc(*pcStr++);
+			sys_uart_putc(*pcStr++);
 	}
 }

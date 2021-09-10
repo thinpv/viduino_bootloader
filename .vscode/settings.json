@@ -8,6 +8,7 @@
 			"stddef.h": "c",
 			"io.h": "c",
 			"lzmadec.h": "c",
-			"7ztypes.h": "c"
+			"7ztypes.h": "c",
+			"sys-spiflash.h": "c"
 		}
 }

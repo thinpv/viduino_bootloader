@@ -16,13 +16,13 @@ extern void jump_to_app(uint32_t entry);
 
 int boot_main(int argc, char **argv)
 {
+	uint8_t boot_to_app = 0;
 	printf("boot_main:\r\n");
 
 	do_init_mem_pool();
 	irq_init();
 	timer0_set();
 
-	uint8_t boot_to_app = 0;
 	gpio_set_dir(GPIOF, 2, GPIO_DIRECTION_INPUT);
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_UP);
 	for (uint8_t i = 0; i < 5; i++)
@@ -34,12 +34,14 @@ int boot_main(int argc, char **argv)
 		}
 	}
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_NONE);
+	gpio_set_dir(GPIOE, 2, GPIO_DIRECTION_OUTPUT);
+	gpio_set_value(GPIOE, 2, 0);
 	if (boot_to_app)
 	{
 		uint32_t dataSize;
 		uint8_t *inBuffer = __in_start;
 		uint32_t inSize;
-		uint8_t *outBuffer = __out_start; //malloc(outSize);
+		uint8_t *outBuffer = __out_start;
 		size_t outSize = 0;
 		ELzmaStatus status;
 		char *p;
