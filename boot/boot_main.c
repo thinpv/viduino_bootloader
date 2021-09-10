@@ -4,23 +4,11 @@
 #include <malloc.h>
 #include <dma.h>
 #include <F1C100S.h>
-
-// #define FIC 1
-
-// #include "slip.h"
+#include <sys-spiflash.h>
 
 #include "Precomp.h"
 #include "Alloc.h"
 #include "LzmaDec.h"
-
-// #include <_acAlloc.h>
-// #include <_aclv_demo_music.h>
-
-#define SIZE_4K 0x1000
-#define SIZE_64K 0x10000
-
-#define FLASH_APP_LEN_START_ADDRESS (0x00200000 - SIZE_4K)
-#define FLASH_APP_START_ADDRESS 0x00200000
 
 extern unsigned char __out_start[];
 extern unsigned char __in_start[];
@@ -48,6 +36,7 @@ int boot_main(int argc, char **argv)
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_NONE);
 	if (boot_to_app)
 	{
+		uint32_t dataSize;
 		uint8_t *inBuffer = __in_start;
 		uint32_t inSize;
 		uint8_t *outBuffer = __out_start; //malloc(outSize);
@@ -57,10 +46,10 @@ int boot_main(int argc, char **argv)
 
 		printf("Boot to App\r\n");
 		sys_spi_flash_init();
-		sys_spi_flash_read(FLASH_APP_LEN_START_ADDRESS, (uint8_t *)&inSize, 4);
-		sys_spi_flash_read(FLASH_APP_START_ADDRESS, inBuffer, inSize);
+		dataSize = sys_spi_flash_read_data_size();
+		sys_spi_flash_read(FLASH_APP_START_ADDRESS, inBuffer, dataSize);
 		sys_spi_flash_exit();
-		printf("inSize: %d\r\n", inSize);
+		printf("dataSize: %d\r\n", dataSize);
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -68,7 +57,7 @@ int boot_main(int argc, char **argv)
 		}
 		printf("outSize: %d\r\n", outSize);
 
-		inSize -= (LZMA_PROPS_SIZE + 8);
+		inSize = dataSize - (LZMA_PROPS_SIZE + 8);
 		inBuffer += (LZMA_PROPS_SIZE + 8);
 
 		printf("start decode\r\n");
@@ -88,7 +77,7 @@ int boot_main(int argc, char **argv)
 		// sys_print_exit();
 		if (res != 0)
 		{
-			memcpy(__out_start, __in_start, inSize);
+			memcpy(__out_start, __in_start, dataSize);
 		}
 		jump_to_app(outBuffer);
 	}

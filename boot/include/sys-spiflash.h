@@ -12,8 +12,8 @@
 #define SIZE_4K                     0x1000
 #define SIZE_64K                    0x10000
 
-#define FLASH_APP_LEN_START_ADDRESS (0x00200000 - SIZE_4K)
-#define FLASH_APP_START_ADDRESS     0x00200000
+#define FLASH_APP_START_ADDRESS     0x00080000 //512kB
+#define FLASH_APP_LEN_START_ADDRESS (FLASH_APP_START_ADDRESS - SIZE_4K)
 
 void sys_spi_flash_init(void);
 void sys_spi_flash_exit(void);
