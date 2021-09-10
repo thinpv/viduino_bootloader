@@ -22,10 +22,6 @@
 #define FLASH_APP_LEN_START_ADDRESS (0x00200000 - SIZE_4K)
 #define FLASH_APP_START_ADDRESS 0x00200000
 
-extern void sys_spinor_init(void);
-extern void sys_spinor_exit(void);
-extern void sys_spinor_read(int addr, void *buf, int count);
-
 extern unsigned char __out_start[];
 extern unsigned char __in_start[];
 extern void jump_to_app(uint32_t entry);
@@ -52,10 +48,10 @@ int boot_main(int argc, char **argv)
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_NONE);
 	if (boot_to_app)
 	{
-		char *inBuffer = __in_start;
+		uint8_t *inBuffer = __in_start;
 		uint32_t inSize;
-		char *outBuffer = __out_start; //malloc(outSize);
-		size_t outSize;
+		uint8_t *outBuffer = __out_start; //malloc(outSize);
+		size_t outSize = 0;
 		ELzmaStatus status;
 		char *p;
 
@@ -64,10 +60,12 @@ int boot_main(int argc, char **argv)
 		sys_spi_flash_read(FLASH_APP_LEN_START_ADDRESS, (uint8_t *)&inSize, 4);
 		sys_spi_flash_read(FLASH_APP_START_ADDRESS, inBuffer, inSize);
 		sys_spi_flash_exit();
+		printf("inSize: %d\r\n", inSize);
 
-		outSize = ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE]) +
-							 ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE + 1]) << 8) +
-							 ((size_t)((unsigned char)inBuffer[LZMA_PROPS_SIZE + 2]) << 16));
+		for (int i = 0; i < 4; i++)
+		{
+			outSize |= inBuffer[LZMA_PROPS_SIZE + i] << 8 * i;
+		}
 		printf("outSize: %d\r\n", outSize);
 
 		inSize -= (LZMA_PROPS_SIZE + 8);
@@ -80,13 +78,18 @@ int boot_main(int argc, char **argv)
 													&outSize,
 													inBuffer,
 													&inSize,
-													inBuffer - (LZMA_PROPS_SIZE + 8),
+													__in_start,
 													LZMA_PROPS_SIZE,
 													LZMA_FINISH_END,
 													&status,
 													(ISzAlloc *)&g_Alloc);
 		printf("res: %d, time: %d\r\n", res, millis() - time);
+		printf("inSize: %d\r\n", inSize);
 		// sys_print_exit();
+		if (res != 0)
+		{
+			memcpy(__out_start, __in_start, inSize);
+		}
 		jump_to_app(outBuffer);
 	}
 	else

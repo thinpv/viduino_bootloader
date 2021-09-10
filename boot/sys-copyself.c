@@ -34,17 +34,14 @@
 extern unsigned char __image_start[];
 extern unsigned char __image_end[];
 extern void sys_mmu_init(void);
-extern void sys_spinor_init(void);
-extern void sys_spinor_exit(void);
-extern void sys_spinor_read(int addr, void *buf, int count);
 
 void sys_copyself(void)
 {
 	uint8_t boot_to_app = 0;
-	void * mem = (void *)__image_start;
+	void *mem = (void *)__image_start;
 	uint32_t size = __image_end - __image_start;
 	sys_mmu_init();
-	sys_spinor_init();
-	sys_spinor_read(0, mem, size);
-	sys_spinor_exit();
+	sys_spi_flash_init();
+	sys_spi_flash_read(0, mem, size);
+	sys_spi_flash_exit();
 }

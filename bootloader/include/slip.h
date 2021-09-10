@@ -2,7 +2,7 @@
 #define SLIP_H_
 
 #include "stdbool.h"
-#include <sys_spiflash.h>
+#include <sys-spiflash.h>
 
 #define MAX_DATA_LEN      1100
 

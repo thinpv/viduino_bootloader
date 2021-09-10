@@ -3,8 +3,8 @@
 #include <string.h>
 #include <io.h>
 #include <stddef.h>
-#include <printf.h>
-#include <sys_spiflash.h>
+// #include <printf.h>
+#include <sys-spiflash.h>
 
 #define W25Q80BV_CMD_WRITE_ENABLE 0x06
 #define W25Q80BV_CMD_WRITE_DISABLE 0x04

@@ -1,7 +1,7 @@
 #include "slip_handle.h"
 #include <string.h>
 #include <printf.h>
-#include <sys_spiflash.h>
+#include <sys-spiflash.h>
 #include <timer.h>
 #include "md5sum.h"
 
