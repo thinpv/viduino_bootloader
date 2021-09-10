@@ -18,24 +18,19 @@ int boot_main(int argc, char **argv)
 {
 	uint8_t boot_to_app = 0;
 	printf("boot_main:\r\n");
-
+	gpio_set_dir(GPIOF, 2, GPIO_DIRECTION_INPUT);
+	gpio_set_pull(GPIOF, 2, GPIO_PULL_UP);
 	do_init_mem_pool();
 	irq_init();
 	timer0_set();
-
-	gpio_set_dir(GPIOF, 2, GPIO_DIRECTION_INPUT);
-	gpio_set_pull(GPIOF, 2, GPIO_PULL_UP);
 	for (uint8_t i = 0; i < 5; i++)
 	{
-		if (gpio_get_value(GPIOF, 2) != 0)
-		{
-			boot_to_app = 1;
+		boot_to_app = gpio_get_value(GPIOF, 2);
+		printf("boot_to_app: %d\r\n", boot_to_app);
+		if (boot_to_app)
 			break;
-		}
 	}
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_NONE);
-	gpio_set_dir(GPIOE, 2, GPIO_DIRECTION_OUTPUT);
-	gpio_set_value(GPIOE, 2, 0);
 	if (boot_to_app)
 	{
 		uint32_t dataSize;
