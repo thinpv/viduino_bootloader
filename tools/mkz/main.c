@@ -78,7 +78,8 @@ int main(int argc, char * argv[])
 		0x62, 0x89, 0x08, 0xdb, 0xf2, 0xb2, 0xe6, 0xa9,
 	};
 	uint8_t majoy = 0, minior = 0, patch = 0;
-	char * keygen = NULL;
+	// char * keygen = NULL;
+	uint8_t keygen[8];
 	char * uniqueid = NULL;
 	int rsize = 0, encrypt = 0;
 	int index = 0;
@@ -153,8 +154,14 @@ int main(int argc, char * argv[])
 		else if(!strcmp(argv[i], "-g") && (argc > i + 1))
 		{
 			char * p = argv[i + 1];
-			if(p && (strcmp(p, "") != 0) && (strlen(p) > 0))
-				keygen = p;
+			if(p && (strcmp(p, "") != 0) && (strlen(p) == 8 * 2))
+			{
+				for(o = 0; o < 32; o++)
+					keygen[o] = hex_string(p, o * 2);
+			}
+
+			// if(p && (strcmp(p, "") != 0) && (strlen(p) > 0))
+			// 	keygen = p;
 			i++;
 		}
 		else if(!strcmp(argv[i], "-i") && (argc > i + 1))
