@@ -27,5 +27,6 @@ uint8_t sys_spi_flash_erase_4k(uint32_t addr);
 uint8_t sys_spi_flash_erase_32k(uint32_t addr);
 uint8_t sys_spi_flash_erase_64k(uint32_t addr);
 uint32_t sys_spi_flash_read_data_size();
+uint8_t sys_spi_flash_get_id(uint8_t *buf);
 
 #endif

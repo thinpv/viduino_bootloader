@@ -157,13 +157,13 @@ uint8_t sys_spi_flash_write(uint32_t addr, uint8_t *buf, uint32_t len)
 	return (error > 0);
 }
 
-u8 SPI_FLASH_BUF[4096];
+uint8_t SPI_FLASH_BUF[4096];
 uint8_t sys_spi_flash_erase_then_write(uint32_t addr, uint8_t *buf, uint32_t len)
 {
-	u32 secpos;
-	u16 secoff;
-	u16 secremain;
-	u16 i;
+	uint32_t secpos;
+	uint16_t secoff;
+	uint16_t secremain;
+	uint16_t i;
 
 	secpos = addr / 4096;			 //Sector address 0~511 for w25x16 ，4K a sector
 	secoff = addr % 4096;			 //Offset within sector
@@ -289,4 +289,19 @@ uint32_t sys_spi_flash_read_data_size()
 	uint32_t size = 0;
 	sys_spi_flash_read(FLASH_APP_LEN_START_ADDRESS, (uint8_t *)&size, 4);
 	return size;
+}
+
+uint8_t sys_spi_flash_get_id(uint8_t *buf)
+{
+	uint8_t tx[5];
+	uint8_t result = 0;
+	tx[0] = 0x4b;
+	tx[1] = 0;
+	tx[2] = 0;
+	tx[3] = 0;
+	tx[4] = 0;
+	spi_select(SPI_FLASH);
+	result = sys_spi_write_then_read(tx, 5, buf, 8);
+	spi_deselect(SPI_FLASH);
+	return result;
 }
