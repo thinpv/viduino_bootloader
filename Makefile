@@ -3,10 +3,7 @@
 #
 
 .PHONY:clean
-.PHONY:write
-.PHONY:mktool
-.PHONY:dump
-.PHONY:test
+.PHONY:write write2
 
 BUILD ?= build
 RM = rm
@@ -17,7 +14,8 @@ SED = sed
 PYTHON = python
 MKSUNXI		:= tools/mksunxi/mksunxi
 MKZ				:= tools/mkz/mkz
-UNIQUEID	:= ""
+XFEL			:= tools/xfel/xfel
+UNIQUEID	:= $(shell $(XFEL) sid)
 ENCRYPT_KEY	:= "679408dc82ae80d411d5d9720b65a43fc4f1534fa563fb28c6cd8928e46aaae9"
 PUBLIC_KEY	:= "03cfd18e4a4b40d6529448aa2df8bbb677128258b8fbfc5b9e492fbbba4e84832f"
 PRIVATE_KEY	:= "dc57b8a9e0e2b7f8b4c929bd8db2844e53f01f171bbcdf6e628908dbf2b2e6a9"
@@ -107,7 +105,6 @@ $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(OBJCOPY) -v -O binary $^ $@
 	$(ECHO) Make header information for brom booting
 	@$(MKSUNXI) $@
-	@$(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $@ $@.z
 
 $(BUILD)/firmware.elf: $(OBJ)
 	$(ECHO) "LINK $@"
@@ -115,10 +112,11 @@ $(BUILD)/firmware.elf: $(OBJ)
 	$(SIZE) $@
 
 write:
-	sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
+	@sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
 
 write2:
-	sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin.z
+	@$(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
+	@sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin.z
 
 clean:
 	rm -rf $(BUILD)
