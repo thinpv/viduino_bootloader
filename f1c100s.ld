@@ -42,6 +42,7 @@ SECTIONS
 		build/boot/sys-mmu.o (.text*)
 		build/boot/sys-spiflash.o (.text*)
 		build/boot/sys-copyself.o (.text*)
+		build/boot/sys-crypt.o (.text*)
 		build/lib/memcpy.o (.text*)
 		build/lib/memset.o (.text*)
 		build/lib/strlen.o (.text*)
