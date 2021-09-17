@@ -57,19 +57,21 @@ void sys_copyself(void)
 	uint32_t csize, dsize;
 	void *mem, *tmp;
 	uint32_t size;
+	uint8_t spi_id[8];
+	uint8_t key[32];
 	z = (struct zdesc_t *)__heap_start;
 	mem = (void *)__image_start;
 	tmp = (void *)z + sizeof(struct zdesc_t);
 	size = __image_end - __image_start;
 	sys_mmu_init();
 	sys_spi_flash_init();
+	sys_spi_flash_get_id(spi_id);
+	sha256_hash(spi_id, sizeof(spi_id), key);
 	sys_spi_flash_read(24576, z, sizeof(struct zdesc_t));
 	if ((z->magic[0] == 'Z') && (z->magic[1] == 'B') && ((z->magic[2] == 'I') || (z->magic[2] == 0)) && ((z->magic[3] == 'E') || (z->magic[3] == 0)))
 	{
-		sys_uart_putc('z');
-		sys_crypt((char *)z->key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
+		sys_crypt((char *)/*z->*/key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
 		{
-			sys_uart_putc('2');
 			csize = (z->csize[0] << 24) | (z->csize[1] << 16) | (z->csize[2] << 8) | (z->csize[3] << 0);
 			dsize = (z->dsize[0] << 24) | (z->dsize[1] << 16) | (z->dsize[2] << 8) | (z->dsize[3] << 0);
 			sys_spi_flash_read(24576 + sizeof(struct zdesc_t), mem, csize);
