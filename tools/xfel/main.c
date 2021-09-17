@@ -105,6 +105,7 @@ static void usage(void)
 
 int main(int argc, char * argv[])
 {
+	int err = 0;
 	struct xfel_ctx_t ctx;
 
 	if(argc < 2)
@@ -317,8 +318,10 @@ int main(int argc, char * argv[])
 				void * buf = file_load(argv[1], &len);
 				if(buf)
 				{
-					if(!spinor_write(&ctx, addr, buf, len))
+					if(!spinor_write(&ctx, addr, buf, len)){
+						err = -1;
 						printf("Not found any spi nor flash\r\n");
+					}
 					free(buf);
 				}
 			}
@@ -365,8 +368,10 @@ int main(int argc, char * argv[])
 				void * buf = file_load(argv[1], &len);
 				if(buf)
 				{
-					if(!spinand_write(&ctx, addr, buf, len))
+					if(!spinand_write(&ctx, addr, buf, len)){
+						err = -1;
 						printf("Not found any spi nand flash\r\n");
+					}
 					free(buf);
 				}
 			}
@@ -380,5 +385,5 @@ int main(int argc, char * argv[])
 		libusb_close(ctx.hdl);
 	libusb_exit(NULL);
 
-	return 0;
+	return err;
 }

@@ -113,16 +113,19 @@ $(BUILD)/firmware.elf: $(OBJ)
 	$(SIZE) $@
 
 write:
+	@# sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
 	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin
 	@sudo $(XFEL) reset
 
 write2:
 	@$(eval UNIQUEID=$(shell sudo $(XFEL) sid))
-	@$(ECHO) Device $(UNIQUEID) version $(VERSION)
-	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID) $(VERSION)
+	@$(ECHO) Device $(UNIQUEID) write version $(VERSION)
 	@sudo $(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) reset
+	@$(ECHO) Update info to google sheet
+	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID) $(VERSION)
+	@$(ECHO) DONE
 
 clean:
 	rm -rf $(BUILD)

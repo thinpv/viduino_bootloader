@@ -51,7 +51,6 @@ int boot_main(int argc, char **argv)
 		{
 			outSize |= inBuffer[LZMA_PROPS_SIZE + i] << 8 * i;
 		}
-		printf("outSize: %d\r\n", outSize);
 
 		inSize = dataSize - (LZMA_PROPS_SIZE + 8);
 		inBuffer += (LZMA_PROPS_SIZE + 8);
@@ -70,6 +69,7 @@ int boot_main(int argc, char **argv)
 													(ISzAlloc *)&g_Alloc);
 		printf("res: %d, time: %d\r\n", res, millis() - time);
 		printf("inSize: %d\r\n", inSize);
+		printf("outSize: %d\r\n", outSize);
 		// sys_print_exit();
 		if (res != 0)
 		{
