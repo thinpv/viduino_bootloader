@@ -57,7 +57,7 @@ void sys_copyself(void)
 	uint32_t csize, dsize;
 	void *mem, *tmp;
 	uint32_t size;
-	uint8_t spi_id[8];
+	uint8_t spi_id[16];
 	uint8_t key[32];
 	z = (struct zdesc_t *)__heap_start;
 	mem = (void *)__image_start;
@@ -66,20 +66,35 @@ void sys_copyself(void)
 	sys_mmu_init();
 	sys_spi_flash_init();
 	sys_spi_flash_get_id(spi_id);
+	spi_id[ 8] = 't';
+	spi_id[ 9] = 'h';
+	spi_id[10] = 'i';
+	spi_id[11] = 'n';
+	spi_id[12] = 'd';
+	spi_id[13] = 'c';
+	spi_id[14] = 'n';
+	spi_id[15] = 'a';
 	sha256_hash(spi_id, sizeof(spi_id), key);
 	sys_spi_flash_read(24576, z, sizeof(struct zdesc_t));
 	if ((z->magic[0] == 'Z') && (z->magic[1] == 'B') && ((z->magic[2] == 'I') || (z->magic[2] == 0)) && ((z->magic[3] == 'E') || (z->magic[3] == 0)))
 	{
+		for(int i=0; i<sizeof(key); i++)
+		{
+			if(key[i] != z->key[i])
+			{
+				while(1){}
+			}
+		}
 		sys_crypt((char *)/*z->*/key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
 		{
 			csize = (z->csize[0] << 24) | (z->csize[1] << 16) | (z->csize[2] << 8) | (z->csize[3] << 0);
-			dsize = (z->dsize[0] << 24) | (z->dsize[1] << 16) | (z->dsize[2] << 8) | (z->dsize[3] << 0);
+			// dsize = (z->dsize[0] << 24) | (z->dsize[1] << 16) | (z->dsize[2] << 8) | (z->dsize[3] << 0);
 			sys_spi_flash_read(24576 + sizeof(struct zdesc_t), mem, csize);
 			// {
-			// 	if (z->magic[3] == 'E')
-			// 	{
-			// 		sys_crypt((char *)z->key, tmp, csize);
-			// 	}
+			// // 	if (z->magic[3] == 'E')
+			// // 	{
+			// // 		sys_crypt((char *)z->key, tmp, csize);
+			// // 	}
 			// 	sys_decompress(tmp, csize, mem, dsize);
 			// }
 		}

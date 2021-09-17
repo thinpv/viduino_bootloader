@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 	};
 	uint8_t majoy = 0, minior = 0, patch = 0;
 	// char * keygen = NULL;
-	uint8_t keygen[8];
+	uint8_t keygen[16];
 	char * uniqueid = NULL;
 	int rsize = 0, encrypt = 0;
 	int index = 0;
@@ -158,6 +158,7 @@ int main(int argc, char * argv[])
 			{
 				for(o = 0; o < 32; o++)
 					keygen[o] = hex_string(p, o * 2);
+				memcpy(&keygen[8], "thindcna", 8);
 			}
 
 			// if(p && (strcmp(p, "") != 0) && (strlen(p) > 0))
@@ -200,7 +201,7 @@ int main(int argc, char * argv[])
 		return -1;
 	}
 	if(keygen)
-		sha256_hash(keygen, strlen(keygen), key);
+		sha256_hash(keygen, sizeof(keygen), key);
 	blfp = fopen(blpath, "r+b");
 	if(blfp == NULL)
 	{
@@ -246,9 +247,9 @@ int main(int argc, char * argv[])
 	z->magic[1] = 'B';
 	z->magic[2] = uniqueid ? 'I' : 0;
 	z->magic[3] = encrypt ? 'E' : 0;
-	if(keygen)
-		memset(&z->key[0], 0, 32);
-	else
+	// if(keygen)
+	// 	memset(&z->key[0], 0, 32);
+	// else
 		memcpy(&z->key[0], &key[0], 32);
 	z->csize[0] = (clen >> 24) & 0xff;
 	z->csize[1] = (clen >> 16) & 0xff;

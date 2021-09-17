@@ -26,7 +26,6 @@ int boot_main(int argc, char **argv)
 	for (uint8_t i = 0; i < 5; i++)
 	{
 		boot_to_app = gpio_get_value(GPIOF, 2);
-		printf("boot_to_app: %d\r\n", boot_to_app);
 		if (boot_to_app)
 			break;
 	}
