@@ -5,6 +5,8 @@
 .PHONY:clean
 .PHONY:write write2
 
+VERSION			= 1.0.0
+
 BUILD ?= build
 RM = rm
 ECHO = @echo
@@ -115,7 +117,8 @@ write:
 
 write2:
 	@$(eval UNIQUEID=$(shell sudo $(XFEL) sid))
-	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID)
+	@$(ECHO) Device $(UNIQUEID) version $(VERSION)
+	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID) $(VERSION)
 	@sudo $(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) reset

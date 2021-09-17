@@ -279,18 +279,18 @@ int main(int argc, char * argv[])
 	sha256_update(&shactx, (void *)(&zblbuf[rsize + sizeof(struct zdesc_t)]), clen);
 	memcpy(&z->sha256[0], sha256_final(&shactx), SHA256_DIGEST_SIZE);
 
-	printf("Aes256 encrypt key:\r\n\t");
-	for(o = 0; o < 32; o++)
-		printf("%02x", key[o]);
-	printf("\r\n");
-	printf("Ecdsa256 public key:\r\n\t");
-	for(o = 0; o < 33; o++)
-		printf("%02x", z->public[o]);
-	printf("\r\n");
-	printf("Ecdsa256 private key:\r\n\t");
-	for(o = 0; o < 32; o++)
-		printf("%02x", private[o]);
-	printf("\r\n");
+	// printf("Aes256 encrypt key:\r\n\t");
+	// for(o = 0; o < 32; o++)
+	// 	printf("%02x", key[o]);
+	// printf("\r\n");
+	// printf("Ecdsa256 public key:\r\n\t");
+	// for(o = 0; o < 33; o++)
+	// 	printf("%02x", z->public[o]);
+	// printf("\r\n");
+	// printf("Ecdsa256 private key:\r\n\t");
+	// for(o = 0; o < 32; o++)
+	// 	printf("%02x", private[o]);
+	// printf("\r\n");
 
 	ecdsa256_sign(private, &z->sha256[0], &z->signature[0]);
 	if(!ecdsa256_verify(&z->public[0], &z->sha256[0], &z->signature[0]))
