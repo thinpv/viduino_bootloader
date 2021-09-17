@@ -66,8 +66,8 @@ void sys_copyself(void)
 	sys_mmu_init();
 	sys_spi_flash_init();
 	sys_spi_flash_get_id(spi_id);
-	spi_id[ 8] = 't';
-	spi_id[ 9] = 'h';
+	spi_id[8] = 't';
+	spi_id[9] = 'h';
 	spi_id[10] = 'i';
 	spi_id[11] = 'n';
 	spi_id[12] = 'd';
@@ -78,14 +78,16 @@ void sys_copyself(void)
 	sys_spi_flash_read(24576, z, sizeof(struct zdesc_t));
 	if ((z->magic[0] == 'Z') && (z->magic[1] == 'B') && ((z->magic[2] == 'I') || (z->magic[2] == 0)) && ((z->magic[3] == 'E') || (z->magic[3] == 0)))
 	{
-		for(int i=0; i<sizeof(key); i++)
+		for (int i = 0; i < sizeof(key); i++)
 		{
-			if(key[i] != z->key[i])
+			if (key[i] != z->key[i])
 			{
-				while(1){}
+				while (1)
+				{
+				}
 			}
 		}
-		sys_crypt((char *)/*z->*/key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
+		sys_crypt((char *)/*z->*/ key, (char *)z->sha256, sizeof(struct zdesc_t) - 36);
 		{
 			csize = (z->csize[0] << 24) | (z->csize[1] << 16) | (z->csize[2] << 8) | (z->csize[3] << 0);
 			// dsize = (z->dsize[0] << 24) | (z->dsize[1] << 16) | (z->dsize[2] << 8) | (z->dsize[3] << 0);
@@ -101,7 +103,10 @@ void sys_copyself(void)
 	}
 	else
 	{
-		sys_spi_flash_read(0, mem, size);
+		// sys_spi_flash_read(0, mem, size);
+		while (1)
+		{
+		}
 	}
 	sys_spi_flash_exit();
 }

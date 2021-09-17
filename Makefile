@@ -113,7 +113,8 @@ $(BUILD)/firmware.elf: $(OBJ)
 	$(SIZE) $@
 
 write:
-	@sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
+	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin
+	@sudo $(XFEL) reset
 
 write2:
 	@$(eval UNIQUEID=$(shell sudo $(XFEL) sid))
@@ -122,7 +123,6 @@ write2:
 	@sudo $(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) reset
-	@# @sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin.z
 
 clean:
 	rm -rf $(BUILD)
