@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "viduino",
+  "private_key_id": "dc697049ddc02d573243d7ae303f835ec915f072",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDrgKBWnwPGqk5P\nRU/rwqmiRX6kHbBNH4jxJUFCh49zAQTHCQ9H/lw6W7Kn5NW/J6sa6E2ASafL9Bv4\nzOMQbW0pfGJ0D1u5Ye0F8Zy+DX0v05SRx56UypfPO5sfil9RNSiPk98Qvt8nPLnu\nrkRHziPFiZ2cAz8Ezjh/6DhOSAe7uRPRuUnHiIU44/wzNI0RyhBc08P1op3K5r8W\n39pfYm4UVLZIsJZN4y5Z3oChYmpQCG5NEThTCIvqw611iHUCG6Qf5GN18/11cKQE\n8jp1xYVXPT67V6imjyYWS1n1vVCcqNbvIbhOQTCC7LcXIhJd51Jym4PegBsLzKVc\nBF9n8NVlAgMBAAECggEAKSdanZh/I+3p7l9Z5oSneSR0y4AmqWuL1jwg6dvfnQS+\nDXwPUBDqlAYnM8DA+30WoQacWIFGkdUQOEuxmFLPAzNpzwdKC5zJu0KsFegsirmK\nGmmMVEsM+Vlcs8fN/VZxRpncHsSEIYqyoTuR0gx7Ys84HCXTEudopy1w/XkH5O1O\napDt4wqXMU9WuMT+0ein7i1iHSONs/Q/PNGB1y8Zpwy73oy79QZlTGxnrqKLuf3i\nHjrpXpsdp0oBj9y7maWXTAV/l6zhilQHPo1ICxe1wgcWLiLiEG8N8LSx1qbJKSJa\n6acx9njtSWZ8K2c8kdrm7+3qdPZaof80EGEh5JvTQQKBgQD7hwwFEqAfdb0vRy8K\nZ7975OtMx/9/nXfkt4gKNSEcwFIRl+vGyfCBj9C3sp3u+kPoKlhbaCk6bpl7qfW4\ni+5Cpgwi/c0iDICW+Jfyyk85/GQNtbXYucXaa2zhab59kxMBdE+/+zeU0hUuBNrT\nv10OhDBQNPUR0bEvMRiKPsVmRQKBgQDvsKIaoJ9ucuFqWmWSPx2HI3CDA4f8EPqA\nFh6hTvi6tX7C4iIuBNnYMSojN2NQxhFTvOFagi50OVj4zwUpvOjhcgxMeBiz4oEI\nPZLmAu+Hv3av/o5N97EoLQo0NJSYUT/RWCAorogZYCEwCoYaNw59OfE774kCzcPV\n8CZ4Xge0oQKBgQDE0U3UgliNhYH+BsOGbtxlRCHjOPRylXOFox9ubVh1uP//CFPU\nf5wUpcZ6l+gBYg/VEZ2GGSF5uaWcIMhIGibcPDZvAw6LQCE3AVtU/n20MAzStYeQ\nCP4LBdhzIl2OwZEzqCHnZdp+N02fbukUnD9i5okvmeDSirUM6mv7cVbhyQKBgQCb\nKIRHKGMMZGF3Lz1BBopeyJo0tTx596Ow9qCtWym383UzQp9NmuZKBMl6Moif6Ree\nVU6sAEmCAv2NUrXM5vT5u5IqjjOvfph4dSN6sbvM7CwwkWAdKJINp9pLIR5v22is\nY5etvg1sH8ZcCvP0VF+UwMVgPxc6MWjsPKEqmfPzAQKBgQCzdHDXWQORRt/39tFv\nIRzwiCzBE4T7qzdO+Gj84Qz1TwE+PLP4kWUhlsOYqKveMG+8TQw1c70kbac3xHTp\nOUNm3B6Z3hYqAagxREzyCPFnpEyuZ7OEA5cOQYiiQqXujScssx+FXHXnWfvF/ONW\nhkiE52WhukmJulUHGSH8oKF93g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "sheet-viduino-id-list@viduino.iam.gserviceaccount.com",
+  "client_id": "107683772626927578587",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sheet-viduino-id-list%40viduino.iam.gserviceaccount.com"
+}

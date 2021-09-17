@@ -114,10 +114,11 @@ write:
 	@sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
 
 write2:
-	@$(eval UNIQUEID=$(shell $(XFEL) sid))
-	@$(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
-	@$(XFEL) spinor write 0 $(BUILD)/firmware.bin.z
-	@$(XFEL) reset
+	@$(eval UNIQUEID=$(shell sudo $(XFEL) sid))
+	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID)
+	@sudo $(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
+	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin.z
+	@sudo $(XFEL) reset
 	@# @sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin.z
 
 clean:
