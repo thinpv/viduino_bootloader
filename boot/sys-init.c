@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define HAVE_INITFINI_ARRAY
+// #define HAVE_INITFINI_ARRAY
 
 #ifdef HAVE_INITFINI_ARRAY
 

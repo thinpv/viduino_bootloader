@@ -30,8 +30,7 @@
 #include <types.h>
 #include <io.h>
 #include <stddef.h>
-
-// #define LOG_ENABLE
+#include <sys-uart.h>
 
 #define vaArg(list, type) ((type *)(list += sizeof(type)))[-1]
 #define vaStart(list, param) list = (INT8 *)((INT)&param + sizeof(param))
@@ -83,6 +82,33 @@ void sys_uart_init(void)
 	val &= ~0x1f;
 	val |= (0x3 << 0) | (0 << 2) | (0x0 << 3);
 	write32(addr + 0x0c, val);
+#endif
+}
+
+void sys_uart_exit(void)
+{
+#ifdef LOG_ENABLE
+	virtual_addr_t addr;
+	u32_t val;
+
+	addr = 0x01c20890 + 0x00;
+	val = read32(addr);
+	val &= ~(0xf << ((1 & 0x7) << 2));
+	write32(addr, val);
+
+	val = read32(addr);
+	val &= ~(0xf << ((0 & 0x7) << 2));
+	write32(addr, val);
+
+	addr = 0x01c20068;
+	val = read32(addr);
+	val &= ~(1 << 20);
+	write32(addr, val);
+
+	addr = 0x01c202d0;
+	val = read32(addr);
+	val &= ~(1 << 20);
+	write32(addr, val);
 #endif
 }
 

@@ -5,6 +5,11 @@
 #include <dma.h>
 #include <F1C100S.h>
 #include <sys-spiflash.h>
+#include <arm32.h>
+
+#include <timer.h>
+#include <sys-uart.h>
+#include <slip.h>
 
 #include "Precomp.h"
 #include "Alloc.h"
@@ -12,12 +17,16 @@
 
 extern unsigned char __out_start[];
 extern unsigned char __in_start[];
-extern void jump_to_app(uint32_t entry);
+extern void jump_to_app(void *entry);
+
+#ifndef VERSION
+#define VERSION "0.0.1"
+#endif
 
 int boot_main(int argc, char **argv)
 {
 	uint8_t boot_to_app = 0;
-	printf("boot_main:\r\n");
+	printf("\r\nViduino bootloader "VERSION"\r\n"); 
 	gpio_set_dir(GPIOF, 2, GPIO_DIRECTION_INPUT);
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_UP);
 	do_init_mem_pool();
@@ -38,7 +47,6 @@ int boot_main(int argc, char **argv)
 		uint8_t *outBuffer = __out_start;
 		size_t outSize = 0;
 		ELzmaStatus status;
-		char *p;
 
 		printf("Boot to App\r\n");
 		sys_spi_flash_init();
@@ -70,12 +78,13 @@ int boot_main(int argc, char **argv)
 		printf("res: %d, time: %d\r\n", res, millis() - time);
 		printf("inSize: %d\r\n", inSize);
 		printf("outSize: %d\r\n", outSize);
-		// sys_print_exit();
-		if (res != 0)
+		if (res != SZ_OK)
 		{
 			memcpy(__out_start, __in_start, dataSize);
 		}
-		jump_to_app(outBuffer);
+		sys_uart_exit();
+		arm32_interrupt_disable();
+		jump_to_app(__out_start);
 	}
 	else
 	{

@@ -46,7 +46,6 @@ SECTIONS
 		build/boot/sha256.o (.text*)
 		build/lib/memcpy.o (.text*)
 		build/lib/memset.o (.text*)
-		build/lib/strlen.o (.text*)
 		build/driver/gpio.o (.text*)
 		build/driver/spi.o (.text*)
 		build/driver/ccu.o (.text*)

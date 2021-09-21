@@ -38,7 +38,7 @@ LIB				= lib
 LZMA			= lzma
 LOADER		= loader
 
-DEFINES		+= -D__ARM32_ARCH__=5 -D__ARM926EJS__ -D__ARM32__ -Wno-unused-function -D_7ZIP_ST
+DEFINES		+= -D__ARM32_ARCH__=5 -D__ARM926EJS__ -D__ARM32__ -Wno-unused-function -D_7ZIP_ST -DVERSION=\"$(VERSION)\"
 
 ASFLAGS		:= -g -ggdb -Wall -O3
 CFLAGS		:= -g -ggdb -Wall -O3
@@ -51,6 +51,8 @@ CFLAGS		+= -ffreestanding -std=gnu11 $(DEFINES)
 CPFLAGS		+= -ffreestanding -std=gnu++11 $(DEFINES) -fno-rtti
 LDFLAGS		+= -Wl,-gc-sections 
 
+CFLAGS		+= -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast -Wno-unused-value 
+
 LIBS 			:= -lgcc -lm -lc -lnosys
 
 SRCDIRS		+= .
@@ -58,7 +60,7 @@ SRCDIRS		+= .
 INCDIRS		+= $(BOOT)/include $(BOOT)/include/f1c100s
 SRCDIRS		+= $(BOOT)
 
-INCDIRS		+= $(LIB) $(LIB)/include
+INCDIRS		+= $(LIB)
 SRCDIRS		+= $(LIB)
 
 INCDIRS		+= $(DRIVER)/include
@@ -88,19 +90,19 @@ all: $(BUILD)/firmware.bin
 
 $(OBJ): | $(OBJ_DIRS)
 $(OBJ_DIRS):
-	$(MKDIR) -p $@
+	@$(MKDIR) -p $@
 
 $(BUILD)/%.o: %.S
 	$(ECHO) "AS $<"
-	$(AS) $(MCFLAGS) $(ASFLAGS) -c $< -o $@
+	@$(AS) $(MCFLAGS) $(ASFLAGS) -c $< -o $@
 	
 $(BUILD)/%.o: %.c
 	$(ECHO) "CC $<"
-	$(CC) $(INCLUDE) $(MCFLAGS) $(CFLAGS) -MD -c $< -o $@
+	@$(CC) $(INCLUDE) $(MCFLAGS) $(CFLAGS) -MD -c $< -o $@
 
 $(BUILD)/%.o: %.cpp
 	$(ECHO) "CXX $<"
-	$(CXX) $(INCLUDE) $(MCFLAGS) $(CPFLAGS) -MD -c $< -o $@
+	@$(CXX) $(INCLUDE) $(MCFLAGS) $(CPFLAGS) -MD -c $< -o $@
 
 $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 	$(OBJCOPY) -v -O binary $^ $@
@@ -109,8 +111,8 @@ $(BUILD)/firmware.bin: $(BUILD)/firmware.elf
 
 $(BUILD)/firmware.elf: $(OBJ)
 	$(ECHO) "LINK $@"
-	$(CXX) $(LDFLAGS) -Wl,--cref,-Map=$@.map -o $@ $^ $(LIBFILE) $(LIBS)
-	$(SIZE) $@
+	@$(CXX) $(LDFLAGS) -Wl,--cref,-Map=$@.map -o $@ $^ $(LIBFILE) $(LIBS)
+	@$(SIZE) $@
 
 write:
 	@# sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
@@ -122,6 +124,7 @@ write2:
 	@$(ECHO) Device $(UNIQUEID) write version $(VERSION)
 	@sudo $(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin.z
+	# sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin.z
 	@sudo $(XFEL) reset
 	@$(ECHO) Update info to google sheet
 	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID) $(VERSION)

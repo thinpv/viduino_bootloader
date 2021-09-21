@@ -284,7 +284,7 @@ const ISzAlloc g_BigAlloc = { SzBigAlloc, SzBigFree };
 
 
 #if (_POSIX_C_SOURCE >= 200112L) && !defined(_WIN32)
-  #define USE_posix_memalign
+  // #define USE_posix_memalign
 #endif
 
 /*

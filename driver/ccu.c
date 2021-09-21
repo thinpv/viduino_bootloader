@@ -121,18 +121,16 @@ uint64_t ccu_get_rate_ddr(uint64_t prate)
 
 uint64_t ccu_get_rate_periph(uint64_t prate)
 {
-	uint32_t r, n, k, m, p;
+	uint32_t r, n, k, p;
 	r = CCU->PLL_PERIPH_CTRL_REG;
 	n = ((r >> 8) & 0x1f) + 1;
 	k = ((r >> 4) & 0x3) + 1;
-	m = ((r >> 0) & 0x3) + 1;
 	p = ((r >> 16) & 0x3) + 1;
 	return (uint64_t)((prate * n * k) / p);
 }
 
 void ccu_reset(int32_t bit, bool enable)
 {
-	vuint32_t addr;
 	if (bit >= 96)
 		return;
 	else if (bit >= 64)
