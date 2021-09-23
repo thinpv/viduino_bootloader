@@ -26,7 +26,7 @@ extern void jump_to_app(void *entry);
 int boot_main(int argc, char **argv)
 {
 	uint8_t boot_to_app = 0;
-	printf("\r\nViduino bootloader "VERSION"\r\n"); 
+	printf("\r\nViduino bootloader " VERSION "\r\n");
 	gpio_set_dir(GPIOF, 2, GPIO_DIRECTION_INPUT);
 	gpio_set_pull(GPIOF, 2, GPIO_PULL_UP);
 	do_init_mem_pool();
@@ -43,7 +43,7 @@ int boot_main(int argc, char **argv)
 	{
 		uint32_t dataSize;
 		uint8_t *inBuffer = __in_start;
-		uint32_t inSize;
+		size_t inSize;
 		uint8_t *outBuffer = __out_start;
 		size_t outSize = 0;
 		ELzmaStatus status;
@@ -65,7 +65,6 @@ int boot_main(int argc, char **argv)
 
 		printf("start decode\r\n");
 		int time = millis();
-		/* Decompress stage2 into memory */
 		SRes res = LzmaDecode(outBuffer,
 													&outSize,
 													inBuffer,
@@ -78,10 +77,49 @@ int boot_main(int argc, char **argv)
 		printf("res: %d, time: %d\r\n", res, millis() - time);
 		printf("inSize: %d\r\n", inSize);
 		printf("outSize: %d\r\n", outSize);
+		// uint8_t sha256[32];
 		if (res != SZ_OK)
 		{
 			memcpy(__out_start, __in_start, dataSize);
+			// sha256_hash(__out_start, dataSize, sha256);
+			// for (int i = 0; i < sizeof(sha256); i++)
+			// {
+			// 	printf("%02x", sha256[i]);
+			// }
+			// printf("\r\n");
+			// delay(100);
 		}
+		else
+		{
+			memset(__out_start + outSize, 0, 0x400);
+		// 	sha256_hash(__out_start, outSize, sha256);
+		// 	for (int i = 0; i < sizeof(sha256); i++)
+		// 	{
+		// 		printf("%02x", sha256[i]);
+		// 	}
+		// 	printf("\r\n");
+		// 	delay(100);
+		}
+
+		// for (vuint32_t i = &CCU->PLL_CPU_CTRL_REG; i <= &CCU->BUS_SOFT_RST_REG2; i += 4)
+		// {
+		// 	if ((i / 4) % 8 == 0)
+		// 		printf("0x%08X: ", i);
+		// 	printf("%08X ", read32(i));
+		// 	if ((i / 4 + 1) % 8 == 0)
+		// 		printf("\r\n");
+		// }
+		// printf("\r\nstart 0x%08X\r\n", __out_start);
+		// for (vuint32_t i = __out_start; i <= __out_start + 400; i += 4)
+		// {
+		// 	if ((i / 4) % 8 == 0)
+		// 		printf("0x%08X: ", i);
+		// 	printf("%08X ", read32(i));
+		// 	if ((i / 4 + 1) % 8 == 0)
+		// 		printf("\r\n");
+		// }
+		// delay(100);
+
 		sys_uart_exit();
 		arm32_interrupt_disable();
 		jump_to_app(__out_start);

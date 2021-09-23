@@ -5,7 +5,7 @@
 .PHONY:clean
 .PHONY:write write2
 
-VERSION			= 1.0.0
+VERSION			= 1.0.1
 
 BUILD ?= build
 RM = rm
@@ -115,11 +115,6 @@ $(BUILD)/firmware.elf: $(OBJ)
 	@$(SIZE) $@
 
 write:
-	@# sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
-	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin
-	@sudo $(XFEL) reset
-
-write2:
 	@$(eval UNIQUEID=$(shell sudo $(XFEL) sid))
 	@$(ECHO) Device $(UNIQUEID) write version $(VERSION)
 	@sudo $(MKZ) -majoy 3 -minior 0 -patch 0 -r 24576 -k $(ENCRYPT_KEY) -pb $(PUBLIC_KEY) -pv $(PRIVATE_KEY) -m $(MESSAGE) -g $(UNIQUEID) -i $(UNIQUEID) $(BUILD)/firmware.bin $(BUILD)/firmware.bin.z
@@ -129,6 +124,11 @@ write2:
 	@$(ECHO) Update info to google sheet
 	@python3 tools/ggsheet/pushtogoogle.py $(UNIQUEID) $(VERSION)
 	@$(ECHO) DONE
+
+write2:
+	@# sudo sunxi-fel -p spiflash-write 0 $(BUILD)/firmware.bin
+	@sudo $(XFEL) spinor write 0 $(BUILD)/firmware.bin
+	@sudo $(XFEL) reset
 
 clean:
 	rm -rf $(BUILD)
