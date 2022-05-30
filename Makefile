@@ -5,7 +5,7 @@
 .PHONY:clean
 .PHONY:write write2
 
-VERSION			= 1.0.1
+VERSION			= 2.0.0
 
 BUILD ?= build
 RM = rm
