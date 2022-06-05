@@ -119,13 +119,13 @@ boot_to_app:
 			}
 #if 0 // dump data
 			printf("data: ");
-			for (uint32_t i = 0; i < 0x100; i++)
+			for (uint32_t i = 0; i < outSize; i++)
 			{
 				if (i % 16 == 0)
 					printf("\r\n0x%02x: ", i);
 				else if (i % 4 == 0)
 					printf(" ");
-				printf("%02x", digest[i]);
+				printf("%02x", __out_start[i]);
 			}
 			printf("\r\n");
 #endif
