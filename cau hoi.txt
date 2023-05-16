@@ -1,1 +1,0 @@
-- lệnh ALIGN(8); để làm gì
